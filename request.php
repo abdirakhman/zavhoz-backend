@@ -5,9 +5,12 @@ header('Content-Type: application/json');
 
 // changing to normal language responsible
 function kek_responsible($String_to_be_changed, $conn) {
-  $ARRAY = explode('\r\n', $String_to_be_changed);
-  $newstroka = "";
+  $ARRAY = explode(PHP_EOL, $String_to_be_changed);
+var_dump($String_to_be_changed);
+  $newstroka = array();
+  var_dump($ARRAY);
   foreach ($ARRAY as $stroka) {
+    $tmpString = "";
     $uakitwa = $stroka;
     $strArray = explode(' ', $uakitwa);
     $lastElement = array_pop($strArray);
@@ -21,18 +24,20 @@ function kek_responsible($String_to_be_changed, $conn) {
         $NAMAE = $row["name"];
     }
     foreach ($strArray as $i) {
-      $newstroka .= $i . ' ';
+      $tmpString .= $i . ' ';
     }
-    $newstroka .= $NAMAE . "\r\n";
+    $tmpString .= $NAMAE;
+    array_push($newstroka, $tmpString);
   }
   return $newstroka;
 }
 
 // changing to normal language place
 function kek_place($String_to_be_changed, $conn) {
-  $ARRAY = explode('\r\n', $String_to_be_changed);
-  $newstroka = "";
+  $ARRAY = explode(PHP_EOL, $String_to_be_changed);
+  $newstroka = array();
   foreach ($ARRAY as $stroka) {
+    $tmp = "";
     $uakitwa = $stroka;
     $strArray = explode(' ', $uakitwa);
     $lastElement = array_pop($strArray);
@@ -46,9 +51,10 @@ function kek_place($String_to_be_changed, $conn) {
         $NAMAE = $row["name"];
     }
     foreach ($strArray as $i) {
-      $newstroka .= $i . ' ';
+      $tmp .= $i . ' ';
     }
-    $newstroka .= $NAMAE . "\r\n";
+    $tmp .= $NAMAE;
+    array_push($newstroka, $tmp);
   }
   return $newstroka;
 }
@@ -94,10 +100,12 @@ $answer->arom_price = 0;
 $answer->responsible = "";
 $answer->place = "";
 $answer->date = "";
-$answer->place_history = "";
-$answer->responsible_history = "";
+$answer->place_history = array();
+$answer->responsible_history = array();
 $answer->month_expired = 0;
 
+$tmp_responsible_history = "";
+$tmp_place_history = "";
 
 if ($checker->error != "no error") {
   $answer->error = $checker->error;
@@ -139,12 +147,12 @@ if ($result->num_rows > 0) {
         $answer->responsible = make_normal_responsible($row["responsible"], $conn);
         $answer->place = make_normal_place($row["place"], $conn);
         $answer->date = $row["date"];
-        $answer->place_history = $row["place_history"];
-        $answer->responsible_history = $row["responsible_history"];
+        $tmp_place_history = $row["place_history"];
+        $tmp_responsible_history = $row["responsible_history"];
         $answer->month_expired = $row["month_expired"];
   }
-  $answer->responsible_history = kek_responsible($answer->responsible_history, $conn);
-  $answer->place_history = kek_place($answer->place_history, $conn);
+  $answer->responsible_history = kek_responsible($tmp_responsible_history, $conn);
+  $answer->place_history = kek_place($tmp_place_history, $conn);
   die(json_encode($answer, JSON_UNESCAPED_UNICODE));
 } else {
   $answer->error="Not found";

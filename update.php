@@ -75,7 +75,7 @@ while($row = $result->fetch_assoc()) {
 
 if ($old_place != $PLACE) {
   //
-  $history_place = $history_place . date('Y/m/d') . " - Changed place for " . $PLACE .  "\r\n";
+  $history_place = $history_place . "\r\n" . date('Y/m/d') . " - Changed place for " . $PLACE;
 
   //
   $q = "SELECT * FROM places where id=?;";
@@ -134,7 +134,7 @@ if ($old_place != $PLACE) {
 
 if ($old_responsible != $RESPONSIBLE) {
 
-  $history_responsible = $history_responsible .  date('Y/m/d') .  " - Item changed responsible for " . $RESPONSIBLE . "\r\n";
+  $history_responsible = $history_responsible . "\r\n" . date('Y/m/d') .  " - Item changed responsible for " . $RESPONSIBLE;
 
   //
 
