@@ -26,6 +26,7 @@ $dbname = $checker->token->db;
 $ID = stripslashes(htmlspecialchars($_POST['id']));
 $RESPONSIBLE = stripslashes(htmlspecialchars($_POST['responsible']));
 $PLACE = stripslashes(htmlspecialchars($_POST['place']));
+$NAME = "";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 $conn->set_charset("utf8");
@@ -58,11 +59,12 @@ while($row = $result->fetch_assoc()) {
   $history_responsible = $row["responsible_history"];
   $old_place = $row["place"];
   $old_responsible = $row["responsible"];
+  $NAME = $row["name"];
 }
 
 if ($old_place != $PLACE) {
   //
-  $history_place .= PHP_EOL . date('Y/m/d') . " - Changed place for " . $PLACE;
+  $history_place .= date('Y/m/d') . " - Changed place for " . $PLACE . PHP_EOL;
 
   //
   $q = "SELECT * FROM places where id=?;";
@@ -75,7 +77,7 @@ if ($old_place != $PLACE) {
     while($row = $result->fetch_assoc()) {
       $tmp = $row["history"];
     }
-    $tmp .= PHP_EOL . date('Y/m/d') . " - Item added " . $ID;
+    $tmp .= date('Y/m/d') . " - Item " . $NAME .  " added " . $ID . PHP_EOL;
     $q = "UPDATE places SET history='$tmp' where id=$PLACE;";
     $stmt = $conn->prepare($q);
 
@@ -102,7 +104,7 @@ if ($old_place != $PLACE) {
     while($row = $result->fetch_assoc()) {
       $tmp = $row["history"];
     }
-    $tmp .= PHP_EOL .  date('Y/m/d') . " - Item removed " . $ID;
+    $tmp .= date('Y/m/d') . " - Item" . $NAME . " removed " . $ID . PHP_EOL;
     $q = "UPDATE places SET history=? where id=?;";
     $stmt = $conn->prepare($q);
     if ($stmt == false) {
@@ -121,7 +123,7 @@ if ($old_place != $PLACE) {
 
 if ($old_responsible != $RESPONSIBLE) {
 
-  $history_responsible .= PHP_EOL . date('Y/m/d') .  " - Item changed responsible for " . $RESPONSIBLE;
+  $history_responsible .= date('Y/m/d') .  " - Item changed responsible for " . $RESPONSIBLE . PHP_EOL;
 
   //
 
@@ -137,7 +139,7 @@ if ($old_responsible != $RESPONSIBLE) {
       $tmp = $row["history"];
     }
     ///YYYY/MM/DD - New responsibility for Item
-    $tmp .= PHP_EOL . date('Y/m/d') . " - New responsibility for Item " . $ID;
+    $tmp .= date('Y/m/d') . " - New responsibility for Item " . $NAME . " " . $ID . PHP_EOL;
     $q = "UPDATE staff SET history=? where id=?;";
     $stmt = $conn->prepare($q);
 
@@ -165,7 +167,7 @@ if ($old_responsible != $RESPONSIBLE) {
       $tmp = $row["history"];
     }
     ///YYYY/MM/DD - cancelled responsibility for Item
-    $tmp .= PHP_EOL .  date('Y/m/d') . " - Cancelled responsibility for Item " . $ID;
+    $tmp .= date('Y/m/d') . " - Cancelled responsibility for Item " . $NAME . " " . $ID . PHP_EOL;
     $q = "UPDATE staff SET history=? where id=?;";
     $stmt = $conn->prepare($q);
 
