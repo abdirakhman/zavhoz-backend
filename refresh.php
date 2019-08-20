@@ -30,9 +30,6 @@ $jwt = stripslashes(htmlspecialchars($_POST['token']));
 if ($jwt == "") {
   $answer->success=0;
   $answer->error = "Something not specified";
-  $answer->access_token = "0";
-  $answer->refresh_token = "0";
-  $answer->good_before = 0;
   die(json_encode($answer));
 }
 #$jwt = $argv[1];
@@ -84,9 +81,6 @@ try {
         ///
       } else {
         $answer->success=0;
-        $answer->access_token = "0";
-        $answer->refresh_token = "0";
-        $answer->good_before = 0;
         $answer->error="old token";
         die(json_encode($answer, JSON_UNESCAPED_UNICODE));
       }
@@ -94,17 +88,11 @@ try {
     die(json_encode($answer, JSON_UNESCAPED_UNICODE));
   } else {
     $answer->success=0;
-    $answer->access_token = "0";
-    $answer->refresh_token = "0";
-    $answer->good_before = 0;
     $answer->error="token not found in db";
     die(json_encode($answer, JSON_UNESCAPED_UNICODE));
   }
 } catch (Exception $e) {
   $answer->success=0;
-  $answer->access_token = "0";
-  $answer->refresh_token = "0";
-  $answer->good_before = 0;
   $answer->error = $e->getMessage();
   die(json_encode($answer));
 }
