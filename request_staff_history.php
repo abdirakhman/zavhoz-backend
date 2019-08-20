@@ -11,7 +11,7 @@ function kek($String_to_be_changed, $conn) {
     $uakitwa = $stroka;
     $strArray = explode(' ', $uakitwa);
     $lastElement = array_pop($strArray);
-    $tmpArray = array((int)$lastElement, $stroka);
+    $tmpArray = array($lastElement, $stroka);
     array_push($newstroka, $tmpArray);
   }
   return $newstroka;
