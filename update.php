@@ -66,7 +66,7 @@ if ($old_place != $PLACE) {
   //
   $history_place .= date('Y/m/d') . " - Changed place for " . $PLACE . PHP_EOL;
 
-  //
+  // place
   $q = "SELECT * FROM places where id=?;";
   $stmt = $conn->prepare($q);
   $stmt->bind_param("i", $PLACE);
@@ -127,7 +127,7 @@ if ($old_responsible != $RESPONSIBLE) {
 
   //
 
-  //
+  // responsible
   $q = "SELECT * FROM staff where id=?;";
   $stmt = $conn->prepare($q);
   $stmt->bind_param("i", $RESPONSIBLE);
