@@ -3,6 +3,34 @@
 require_once("validate.php");
 header('Content-Type: application/json');
 
+function kek($String_to_be_changed, $conn) {
+  # $tmp .= PHP_EOL . date('Y/m/d') . " - New responsibility for Item " . $ID;
+  $ARRAY = explode(PHP_EOL, $String_to_be_changed);
+  $newstroka = array();
+  foreach ($ARRAY as $stroka) {
+    $tmpString = "";
+    $uakitwa = $stroka;
+    $strArray = explode(' ', $uakitwa);
+    $lastElement = array_pop($strArray);
+    $q = "SELECT * FROM furniture WHERE id=?;";
+    $stmt = $conn->prepare($q);
+    $stmt->bind_param("i", $lastElement);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $NAMAE = "";
+    while($row = $result->fetch_assoc()) {
+        $NAMAE = $row["name"];
+    }
+    foreach ($strArray as $i) {
+      $tmpString .= $i . ' ';
+    }
+    $tmpString .= $NAMAE;
+    array_push($newstroka, $tmpString);
+  }
+  return $newstroka;
+}
+
+
 $servername = "localhost";
 $username = "root";
 $password = "(S#,c}pQvr5XY8jE";
@@ -11,7 +39,7 @@ $checker = json_decode(check_jwt());
 
 
 $answer->error = "no error";
-$answer->history = "";
+$answer->history = array();
 
 if ($checker->error != "no error") {
   $answer->error = $checker->error;
@@ -47,7 +75,7 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
   while($row = $result->fetch_assoc()) {
-        $answer->history = $row["history"];
+        $answer->history = kek($row["history"], $conn);
   }
   die(json_encode($answer, JSON_UNESCAPED_UNICODE));
 } else {
