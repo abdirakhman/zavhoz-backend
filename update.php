@@ -104,7 +104,7 @@ if ($old_place != $PLACE) {
     while($row = $result->fetch_assoc()) {
       $tmp = $row["history"];
     }
-    $tmp .= date('Y/m/d') . " - Item" . $NAME . " removed " . $ID . PHP_EOL;
+    $tmp .= date('Y/m/d') . " - Item " . $NAME . " removed " . $ID . PHP_EOL;
     $q = "UPDATE places SET history=? where id=?;";
     $stmt = $conn->prepare($q);
     if ($stmt == false) {
