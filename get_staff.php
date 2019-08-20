@@ -35,7 +35,7 @@ $result = $conn->query($q);
 if ($result->num_rows > 0) {
   while($row = $result->fetch_assoc()) {
         #array_push($answer->return_array, $row["name"]);
-        $answer->return_array[$row["id"]] = $row["name"];
+        $answer->return_array[(int)$row["id"]] = $row["name"];
         #echo($row["name"]);
   }
   die(json_encode($answer, JSON_UNESCAPED_UNICODE));

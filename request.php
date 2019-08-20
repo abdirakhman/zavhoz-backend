@@ -6,9 +6,7 @@ header('Content-Type: application/json');
 // changing to normal language responsible
 function kek_responsible($String_to_be_changed, $conn) {
   $ARRAY = explode(PHP_EOL, $String_to_be_changed);
-var_dump($String_to_be_changed);
   $newstroka = array();
-  var_dump($ARRAY);
   foreach ($ARRAY as $stroka) {
     $tmpString = "";
     $uakitwa = $stroka;
