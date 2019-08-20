@@ -24,20 +24,8 @@ if ($checker->token->type != 1) {
 $dbname = $checker->token->db;
 
 $ID = stripslashes(htmlspecialchars($_POST['id']));
-$INIT_COST = stripslashes(htmlspecialchars($_POST['init_cost']));
-$NAME = stripslashes(htmlspecialchars($_POST['name']));
-$AROM_PRICE = stripslashes(htmlspecialchars($_POST['arom_price']));
 $RESPONSIBLE = stripslashes(htmlspecialchars($_POST['responsible']));
 $PLACE = stripslashes(htmlspecialchars($_POST['place']));
-$DATE = stripslashes(htmlspecialchars($_POST['date']));
-$MONTH_EXPIRED = stripslashes(htmlspecialchars($_POST['month_expired']));
-// echo $ID;
-// echo $INIT_COST;
-// echo $NAME;
-// echo $RESPONSIBLE;
-// echo $PLACE;
-// echo $DATE;
-// echo $MONTH_EXPIRED;
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 $conn->set_charset("utf8");
@@ -48,8 +36,7 @@ if ($conn->connect_error) {
     die(json_encode($answer));
 }
 
-if ($ID == "" || $INIT_COST == "" || $NAME == "" || $AROM_PRICE == "" ||
- $RESPONSIBLE == "" || $PLACE == "" || $DATE == "" || $MONTH_EXPIRED == "") {
+if ($ID == "" || $RESPONSIBLE == "" || $PLACE == "") {
   $answer->error = "Something not specified";
   die(json_encode($answer));
 }
@@ -197,11 +184,11 @@ if ($old_responsible != $RESPONSIBLE) {
 
 
 
-$q = "UPDATE furniture SET init_cost=?, name=?, arom_price=?, responsible=?,date=?,month_expired=?,place=?,place_history=?,responsible_history=? WHERE id=$ID;";
+$q = "UPDATE furniture SET responsible=?,place=?,place_history=?,responsible_history=? WHERE id=$ID;";
 $stmt = $conn->prepare($q);
 
 if ($stmt != false) {
-  $stmt->bind_param("isiisiiss", $INIT_COST, $NAME, $AROM_PRICE, $RESPONSIBLE, $DATE, $MONTH_EXPIRED, $PLACE, $history_place, $history_responsible);
+  $stmt->bind_param("iiss", $RESPONSIBLE, $PLACE, $history_place, $history_responsible);
   $stmt->execute();
   die(json_encode($answer));
 } else {

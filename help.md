@@ -71,7 +71,7 @@ request.php
     error, init_cost, name, arom_price, responsible, place, date, month_expired
 update.php
   Need:
-    id, init_cost, name, arom_price, responsible, place, date, month_expired
+    id, responsible, place
   Function:
     Updates information
   Return:
