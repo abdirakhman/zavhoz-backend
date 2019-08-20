@@ -75,7 +75,7 @@ while($row = $result->fetch_assoc()) {
 
 if ($old_place != $PLACE) {
   //
-  $history_place = $history_place . "\r\n" . date('Y/m/d') . " - Changed place for " . $PLACE;
+  $history_place .= PHP_EOL . date('Y/m/d') . " - Changed place for " . $PLACE;
 
   //
   $q = "SELECT * FROM places where id=?;";
@@ -88,7 +88,7 @@ if ($old_place != $PLACE) {
     while($row = $result->fetch_assoc()) {
       $tmp = $row["history"];
     }
-    $tmp = $tmp . date('Y/m/d') . " - Item " . $ID . " was introduced" . "\r\n";
+    $tmp .= PHP_EOL . date('Y/m/d') . " - Item added " . $ID;
     $q = "UPDATE places SET history='$tmp' where id=$PLACE;";
     $stmt = $conn->prepare($q);
 
@@ -115,7 +115,7 @@ if ($old_place != $PLACE) {
     while($row = $result->fetch_assoc()) {
       $tmp = $row["history"];
     }
-    $tmp = $tmp . date('Y/m/d') . " - Item " . $ID . " was removed" . "\r\n";
+    $tmp .= PHP_EOL .  date('Y/m/d') . " - Item removed " . $ID;
     $q = "UPDATE places SET history=? where id=?;";
     $stmt = $conn->prepare($q);
     if ($stmt == false) {
@@ -134,7 +134,7 @@ if ($old_place != $PLACE) {
 
 if ($old_responsible != $RESPONSIBLE) {
 
-  $history_responsible = $history_responsible . "\r\n" . date('Y/m/d') .  " - Item changed responsible for " . $RESPONSIBLE;
+  $history_responsible .= PHP_EOL . date('Y/m/d') .  " - Item changed responsible for " . $RESPONSIBLE;
 
   //
 
@@ -149,7 +149,8 @@ if ($old_responsible != $RESPONSIBLE) {
     while($row = $result->fetch_assoc()) {
       $tmp = $row["history"];
     }
-    $tmp = $tmp . date('Y/m/d') . " - Item " . $ID . " under the responsibility" . "\r\n";
+    ///YYYY/MM/DD - New responsibility for Item
+    $tmp .= PHP_EOL . date('Y/m/d') . " - New responsibility for Item " . $ID;
     $q = "UPDATE staff SET history=? where id=?;";
     $stmt = $conn->prepare($q);
 
@@ -176,7 +177,8 @@ if ($old_responsible != $RESPONSIBLE) {
     while($row = $result->fetch_assoc()) {
       $tmp = $row["history"];
     }
-    $tmp = $tmp .  date('Y/m/d') . " - Item " . $ID . " was removed from responsibility" . "\r\n";
+    ///YYYY/MM/DD - cancelled responsibility for Item
+    $tmp .= PHP_EOL .  date('Y/m/d') . " - Cancelled responsibility for Item " . $ID;
     $q = "UPDATE staff SET history=? where id=?;";
     $stmt = $conn->prepare($q);
 
