@@ -8,24 +8,11 @@ function kek($String_to_be_changed, $conn) {
   $ARRAY = explode(PHP_EOL, $String_to_be_changed);
   $newstroka = array();
   foreach ($ARRAY as $stroka) {
-    $tmpString = "";
     $uakitwa = $stroka;
     $strArray = explode(' ', $uakitwa);
     $lastElement = array_pop($strArray);
-    $q = "SELECT * FROM furniture WHERE id=?;";
-    $stmt = $conn->prepare($q);
-    $stmt->bind_param("i", $lastElement);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $NAMAE = "";
-    while($row = $result->fetch_assoc()) {
-        $NAMAE = $row["name"];
-    }
-    foreach ($strArray as $i) {
-      $tmpString .= $i . ' ';
-    }
-    $tmpString .= $NAMAE;
-    array_push($newstroka, $tmpString);
+    $tmpArray = array((int)$lastElement, $stroka);
+    array_push($newstroka, $tmpArray);
   }
   return $newstroka;
 }
