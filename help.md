@@ -79,3 +79,8 @@ update.php
 validate.php
   Function:
     Validate access_token
+get_place.php
+  Function:
+    Give list of places
+  Return:
+    error, return_array
