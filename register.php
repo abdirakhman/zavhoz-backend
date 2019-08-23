@@ -41,7 +41,7 @@ if ($LOGIN == "" || $PASS == "" || $NAME == "" || $PLACE == "" || $TYPE == "" ||
   die(json_encode($answer));
 }
 
-$q = "SELECT * FROM login WHERE code=?;";
+$q = "SELECT * FROM login WHERE code=? AND place=? AND type=?;";
 
 $stmt = $conn->prepare($q);
 $stmt->bind_param("s", $CODE);
@@ -59,10 +59,10 @@ if ($result->num_rows > 0) {
       'cost' => 11
     ];
     $PASS = password_hash($PASS, PASSWORD_BCRYPT, $options);
-    $q = "UPDATE login SET email=?, name=?, password=?, place=?, type=? WHERE code=?;";
+    $q = "UPDATE login SET email=?, name=?, password=?, code=? WHERE type=? AND code=? AND place=?;";
     $stmt = $conn->prepare($q);
     if ($stmt != false) {
-      $stmt->bind_param("sssiis", $LOGIN, $NAME, $PASS, $PLACE, $TYPE, $CODE);
+      $stmt->bind_param("sssiss", $LOGIN, $NAME, $PASS, "", $TYPE, $CODE, $PLACE);
       $stmt->execute();
       die(json_encode($answer));
     } else {
