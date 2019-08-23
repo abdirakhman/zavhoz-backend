@@ -52,7 +52,7 @@ if ($result->num_rows > 0) {
   $result = $stmt->get_result();
 
   while($row = $result->fetch_assoc()) {
-    $tmpArray = array($row["id"], $row["name"]);
+    $tmpArray = array((string)$row["id"], $row["name"]);
     array_push($answer->return_array, $tmpArray);
   }
   die(json_encode($answer, JSON_UNESCAPED_UNICODE));

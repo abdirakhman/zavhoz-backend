@@ -26,7 +26,7 @@ $checker = json_decode(check_jwt());
 
 
 $answer->error = "no error";
-$answer->history = array();
+$answer->return_array = array();
 
 if ($checker->error != "no error") {
   $answer->error = $checker->error;
@@ -62,7 +62,7 @@ $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
   while($row = $result->fetch_assoc()) {
-        $answer->history = kek($row["history"], $conn);
+        $answer->return_array = kek($row["history"], $conn);
   }
   die(json_encode($answer, JSON_UNESCAPED_UNICODE));
 } else {
