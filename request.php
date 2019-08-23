@@ -42,7 +42,9 @@ $answer->init_cost = 0;
 $answer->name = "";
 $answer->arom_price = 0;
 $answer->responsible = "";
+$answer->responsible_id = "";
 $answer->place = "";
+$answer->place_id = "";
 $answer->date = "";
 $answer->month_expired = 0;
 
@@ -84,7 +86,9 @@ if ($result->num_rows > 0) {
         $answer->name = $row["name"];
         $answer->arom_price = $row["arom_price"];
         $answer->responsible = make_normal_responsible($row["responsible"], $conn);
+        $answer->responsible_id = (string)$row["responsible"];
         $answer->place = make_normal_place($row["place"], $conn);
+        $answer->place_id = (string)$row["place"];
         $answer->date = $row["date"];
         $answer->month_expired = $row["month_expired"];
   }
