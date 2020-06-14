@@ -52,8 +52,10 @@ if ($result->num_rows > 0) {
   $result = $stmt->get_result();
 
   while($row = $result->fetch_assoc()) {
-    $tmpArray = array((string)$row["id"], $row["name"]);
-    array_push($answer->return_array, $tmpArray);
+    $kek['id'] = (string)$row["id"];
+    $kek['name'] = $row["name"];
+    #$tmpArray = array((string)$row["id"], $row["name"]);
+    array_push($answer->return_array, $kek);
   }
   die(json_encode($answer, JSON_UNESCAPED_UNICODE));
 } else {
