@@ -8,6 +8,7 @@ $password = "(S#,c}pQvr5XY8jE";
 $checker = json_decode(check_jwt());
 
 $answer->error = "no error";
+$answer->id = -1;
 
 
 if ($checker->error != "no error") {
@@ -57,6 +58,7 @@ $stmt = $conn->prepare($q);
 if ($stmt != false) {
   $stmt->bind_param("iiiississ", $INIT_COST, $AROM_PRICE, $RESPONSIBLE, $PLACE, $DATE, $NAME, $MONTH_EXPIRED, $tmppl, $tmphis);
   $stmt->execute();
+  $answer->id = $stmt->insert_id;
   die(json_encode($answer));
 } else {
   $answer->error = "error";
