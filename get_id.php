@@ -46,12 +46,12 @@ if ($PLACE == "" && $RESPONSIBLE == "") {
   global $stmt;
   $stmt = $conn->prepare($q);
 } else if ($PLACE == "") {
-  $q = "SELECT id from furniture WHERE responsible=?";
+  $q = "SELECT * from furniture WHERE responsible=?";
   global $stmt;
   $stmt = $conn->prepare($q);
   $stmt->bind_param("i", $RESPONSIBLE);
 } else {
-  $q = "SELECT id from furniture WHERE place=?";
+  $q = "SELECT * from furniture WHERE place=?";
   global $stmt;
   $stmt = $conn->prepare($q);
   $stmt->bind_param("i", $PLACE);
