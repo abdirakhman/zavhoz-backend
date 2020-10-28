@@ -1,6 +1,5 @@
 <?php
-#done with post and json norm
-require_once("validate.php");
+require_once "validate.php";
 
 #database connection
 $servername = "localhost";
@@ -13,8 +12,8 @@ $answer->error = "no error";
 $answer->return_array = array();
 #check for login
 if ($checker->error != "no error") {
-  $answer->error = $checker->error;
-  die(json_encode($answer));
+    $answer->error = $checker->error;
+    die(json_encode($answer));
 }
 #take db name from jwt
 $dbname = $checker->token->db;
@@ -33,16 +32,15 @@ $q = "SELECT * FROM places";
 $result = $conn->query($q);
 #take data
 if ($result->num_rows > 0) {
-  while($row = $result->fetch_assoc()) {
-        $kek["id"] = (int)$row["id"];
-        $kek["name"] = $row["name"];
-        array_push($answer->return_array, $kek);
+    while ($row = $result->fetch_assoc()) {
+        $tmp["id"] = (int) $row["id"];
+        $tmp["name"] = $row["name"];
+        array_push($answer->return_array, $tmp);
         #$answer->return_array[(int)$row["id"]] = $row["name"];
         #echo($row["name"]);
-  }
-  die(json_encode($answer, JSON_UNESCAPED_UNICODE));
+    }
+    die(json_encode($answer, JSON_UNESCAPED_UNICODE));
 } else {
-  die(json_encode($answer, JSON_UNESCAPED_UNICODE));
+    die(json_encode($answer, JSON_UNESCAPED_UNICODE));
 }
 $conn->close();
-?>

@@ -1,5 +1,5 @@
 <?php
-require_once("validate.php");
+require_once "validate.php";
 
 $servername = "localhost";
 $username = "root";
@@ -10,15 +10,14 @@ $checker = json_decode(check_jwt());
 $answer->error = "no error";
 $answer->id = -1;
 
-
 if ($checker->error != "no error") {
-  $answer->error = $checker->error;
-  die(json_encode($answer));
+    $answer->error = $checker->error;
+    die(json_encode($answer));
 }
 
 if ($checker->token->type != 1) {
-  $answer->error = "Not enough privilege";
-  die(json_encode($answer));
+    $answer->error = "Not enough privilege";
+    die(json_encode($answer));
 }
 $dbname = $checker->token->db;
 
@@ -32,7 +31,6 @@ if ($conn->connect_error) {
     die(json_encode($answer));
 }
 
-
 $INIT_COST = stripslashes(htmlspecialchars($_POST['init_cost']));
 $NAME = stripslashes(htmlspecialchars($_POST['name']));
 $AROM_PRICE = stripslashes(htmlspecialchars($_POST['arom_price']));
@@ -41,28 +39,26 @@ $PLACE = stripslashes(htmlspecialchars($_POST['place']));
 $DATE = stripslashes(htmlspecialchars($_POST['date']));
 $MONTH_EXPIRED = stripslashes(htmlspecialchars($_POST['month_expired']));
 
-
 if ($INIT_COST == "" || $NAME == "" || $AROM_PRICE == "" ||
- $RESPONSIBLE == "" || $PLACE == "" || $DATE == "" || $MONTH_EXPIRED == "") {
-  $answer->error = "Something not specified";
-  die(json_encode($answer));
+    $RESPONSIBLE == "" || $PLACE == "" || $DATE == "" || $MONTH_EXPIRED == "") {
+    $answer->error = "Something not specified";
+    die(json_encode($answer));
 }
 
-$tmppl = date('Y/m/d') . " - Changed place for " . $PLACE .  "\r\n";
-$tmphis = date('Y/m/d') .  " - Item changed responsible for " . $RESPONSIBLE . "\r\n";
+$tmppl = date('Y/m/d') . " - Changed place for " . $PLACE . "\r\n";
+$tmphis = date('Y/m/d') . " - Item changed responsible for " . $RESPONSIBLE . "\r\n";
 
 $q = "INSERT INTO furniture (init_cost, arom_price, responsible, place, date, name, month_expired, place_history, responsible_history) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($q);
 
 if ($stmt != false) {
-  $stmt->bind_param("iiiississ", $INIT_COST, $AROM_PRICE, $RESPONSIBLE, $PLACE, $DATE, $NAME, $MONTH_EXPIRED, $tmppl, $tmphis);
-  $stmt->execute();
-  $answer->id = $stmt->insert_id;
-  die(json_encode($answer));
+    $stmt->bind_param("iiiississ", $INIT_COST, $AROM_PRICE, $RESPONSIBLE, $PLACE, $DATE, $NAME, $MONTH_EXPIRED, $tmppl, $tmphis);
+    $stmt->execute();
+    $answer->id = $stmt->insert_id;
+    die(json_encode($answer));
 } else {
-  $answer->error = "error";
-  die(json_encode($answer));
+    $answer->error = "error";
+    die(json_encode($answer));
 }
 $conn->close();
-?>

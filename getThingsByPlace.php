@@ -1,6 +1,5 @@
 <?php
-#done with post and json norm
-require_once("validate.php");
+require_once "validate.php";
 header('Content-Type: application/json');
 
 $servername = "localhost";
@@ -13,8 +12,8 @@ $answer->error = "no error";
 $answer->return_array = array();
 
 if ($checker->error != "no error") {
-  $answer->error = $checker->error;
-  die(json_encode($answer));
+    $answer->error = $checker->error;
+    die(json_encode($answer));
 }
 
 $dbname = $checker->token->db;
@@ -32,8 +31,8 @@ if ($conn->connect_error) {
 }
 
 if ($ID == "") {
-  $answer->error = "No id specified";
-  die(json_encode($answer));
+    $answer->error = "No id specified";
+    die(json_encode($answer));
 }
 
 $q = "SELECT * FROM places where id=?";
@@ -44,25 +43,24 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
-  $q = "SELECT * FROM furniture where place=?";
+    $q = "SELECT * FROM furniture where place=?";
 
-  $stmt = $conn->prepare($q);
-  $stmt->bind_param("i", $ID);
-  $stmt->execute();
-  $result = $stmt->get_result();
+    $stmt = $conn->prepare($q);
+    $stmt->bind_param("i", $ID);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-  while($row = $result->fetch_assoc()) {
-    $kek['id'] = (string)$row["id"];
-    $kek['name'] = $row["name"];
+    while ($row = $result->fetch_assoc()) {
+        $tmp['id'] = (string) $row["id"];
+        $tmp['name'] = $row["name"];
 
-    #$tmpArray = array((string)$row["id"], $row["name"]);
-    #array_push($answer->return_array, $tmpArray);
-    array_push($answer->return_array, $kek);
-  }
-  die(json_encode($answer, JSON_UNESCAPED_UNICODE));
+        #$tmpArray = array((string)$row["id"], $row["name"]);
+        #array_push($answer->return_array, $tmpArray);
+        array_push($answer->return_array, $tmp);
+    }
+    die(json_encode($answer, JSON_UNESCAPED_UNICODE));
 } else {
-  $answer->error="Not found";
-  die(json_encode($answer, JSON_UNESCAPED_UNICODE));
+    $answer->error = "Not found";
+    die(json_encode($answer, JSON_UNESCAPED_UNICODE));
 }
 $conn->close();
-?>

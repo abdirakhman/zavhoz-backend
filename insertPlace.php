@@ -1,5 +1,5 @@
 <?php
-require_once("validate.php");
+require_once "validate.php";
 
 $servername = "localhost";
 $username = "root";
@@ -10,15 +10,14 @@ $checker = json_decode(check_jwt());
 $answer->error = "no error";
 $answer->id = -1;
 
-
 if ($checker->error != "no error") {
-  $answer->error = $checker->error;
-  die(json_encode($answer));
+    $answer->error = $checker->error;
+    die(json_encode($answer));
 }
 
 if ($checker->token->type != 1) {
-  $answer->error = "Not enough privilege";
-  die(json_encode($answer));
+    $answer->error = "Not enough privilege";
+    die(json_encode($answer));
 }
 $dbname = $checker->token->db;
 
@@ -35,8 +34,8 @@ if ($conn->connect_error) {
 $NAME = stripslashes(htmlspecialchars($_POST['name']));
 
 if ($NAME == "") {
-  $answer->error = "Something not specified";
-  die(json_encode($answer));
+    $answer->error = "Something not specified";
+    die(json_encode($answer));
 }
 
 $tmp = "";
@@ -46,13 +45,12 @@ $q = "INSERT INTO places (id, name, history) VALUES (NULL, ?, ?)";
 $stmt = $conn->prepare($q);
 
 if ($stmt != false) {
-  $stmt->bind_param("ss", $NAME, $tmp);
-  $stmt->execute();
-  $answer->id = $stmt->insert_id;
-  die(json_encode($answer));
+    $stmt->bind_param("ss", $NAME, $tmp);
+    $stmt->execute();
+    $answer->id = $stmt->insert_id;
+    die(json_encode($answer));
 } else {
-  $answer->error = "error";
-  die(json_encode($answer));
+    $answer->error = "error";
+    die(json_encode($answer));
 }
 $conn->close();
-?>

@@ -18,7 +18,6 @@ if ($conn->connect_error) {
     die(json_encode($answer));
 }
 
-
 $LOGIN = stripslashes(htmlspecialchars($_POST['login']));
 $PASS = stripslashes(htmlspecialchars($_POST['pass']));
 $NAME = stripslashes(htmlspecialchars($_POST['name']));
@@ -27,18 +26,9 @@ $TYPE = stripslashes(htmlspecialchars($_POST['type']));
 $CODE = stripslashes(htmlspecialchars($_POST['code']));
 
 
-#echo $LOGIN;
-#echo $PASS;
-#echo $NAME;
-#echo $PLACE;
-#echo $TYPE;
-#echo $CODE;
-
-
-
 if ($LOGIN == "" || $PASS == "" || $NAME == "" || $PLACE == "" || $TYPE == "" || $CODE == "") {
-  $answer->error = "Something not specified";
-  die(json_encode($answer));
+    $answer->error = "Something not specified";
+    die(json_encode($answer));
 }
 
 $q = "SELECT * FROM login WHERE code=? AND place=? AND type=?;";
@@ -49,31 +39,30 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows > 0) {
-  while($row = $result->fetch_assoc()) {
+    while ($row = $result->fetch_assoc()) {
 
-    if (!filter_var($LOGIN, FILTER_VALIDATE_EMAIL)) {
-      $answer->error="Invalid email";
-      die(json_encode($answer, JSON_UNESCAPED_UNICODE));
+        if (!filter_var($LOGIN, FILTER_VALIDATE_EMAIL)) {
+            $answer->error = "Invalid email";
+            die(json_encode($answer, JSON_UNESCAPED_UNICODE));
+        }
+        $options = [
+            'cost' => 11,
+        ];
+        $PASS = password_hash($PASS, PASSWORD_BCRYPT, $options);
+        $q = "UPDATE login SET email=?, name=?, password=?, code=? WHERE type=? AND code=? AND place=?;";
+        $stmt = $conn->prepare($q);
+        if ($stmt != false) {
+            $stmt->bind_param("sssiss", $LOGIN, $NAME, $PASS, "", $TYPE, $CODE, $PLACE);
+            $stmt->execute();
+            die(json_encode($answer));
+        } else {
+            $answer->error = "error";
+            die(json_encode($answer));
+        }
     }
-    $options = [
-      'cost' => 11
-    ];
-    $PASS = password_hash($PASS, PASSWORD_BCRYPT, $options);
-    $q = "UPDATE login SET email=?, name=?, password=?, code=? WHERE type=? AND code=? AND place=?;";
-    $stmt = $conn->prepare($q);
-    if ($stmt != false) {
-      $stmt->bind_param("sssiss", $LOGIN, $NAME, $PASS, "", $TYPE, $CODE, $PLACE);
-      $stmt->execute();
-      die(json_encode($answer));
-    } else {
-      $answer->error = "error";
-      die(json_encode($answer));
-    }
-  }
-  die(json_encode($answer, JSON_UNESCAPED_UNICODE));
+    die(json_encode($answer, JSON_UNESCAPED_UNICODE));
 } else {
-  $answer->error="Not found";
-  die(json_encode($answer, JSON_UNESCAPED_UNICODE));
+    $answer->error = "Not found";
+    die(json_encode($answer, JSON_UNESCAPED_UNICODE));
 }
 $conn->close();
-?>
